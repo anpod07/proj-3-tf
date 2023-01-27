@@ -9,6 +9,10 @@ pipeline {
     timestamps()
   }
 
+  triggers {
+    upstream 'testpipe'
+  }
+
   stages {
     stage('CleanWorkspace') {
       steps {
