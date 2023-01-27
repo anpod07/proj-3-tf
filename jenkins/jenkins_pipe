@@ -21,7 +21,7 @@ pipeline {
     }
     stage('GetCodeFromGitHub') {
       steps {
-        git branch: 'main', credentialsId: 'github-key', url: 'git@github.com:anpod07/proj-3-tf'
+        git branch: 'main', credentialsId: 'github-key', url: 'git@github.com:anpod07/proj-3-tf.git'
         sh '''
           pwd
           ls -la
@@ -37,7 +37,7 @@ pipeline {
 //      steps {
 //
 //      }
-    }
+//    }
   }
 }
 
