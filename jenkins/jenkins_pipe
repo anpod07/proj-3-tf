@@ -17,22 +17,22 @@ pipeline {
     }
     stage('GetCodeFromGitHub') {
       steps {
-        git branch: 'main', credentialsId: 'github-key', url: 'git@github.com:anpod07/test_rep.git'
+        git branch: 'main', credentialsId: 'github-key', url: 'git@github.com:anpod07/proj-3-tf'
         sh '''
           pwd
           ls -la
         '''
       }
     }
-    stage('InstallTerraformCLI') {
-      steps {
-
-      }
-    }
-    stage('ExecTerraformCode') {
-      steps {
-
-      }
+//    stage('InstallTerraformCLI') {
+//      steps {
+//
+//      }
+//    }
+//    stage('ExecTerraformCode') {
+//      steps {
+//
+//      }
     }
   }
 }
