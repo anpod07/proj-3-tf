@@ -1,0 +1,39 @@
+pipeline {
+  agent {
+    label 'master'
+  }
+
+  options {
+    buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '3')
+    disableConcurrentBuilds()
+    timestamps()
+  }
+
+  stages {
+    stage('CleanWorkspace') {
+      steps {
+        cleanWs()
+      }
+    }
+    stage('GetCodeFromGitHub') {
+      steps {
+        git branch: 'main', credentialsId: 'github-key', url: 'git@github.com:anpod07/test_rep.git'
+        sh '''
+          pwd
+          ls -la
+        '''
+      }
+    }
+    stage('InstallTerraformCLI') {
+      steps {
+
+      }
+    }
+    stage('ExecTerraformCode') {
+      steps {
+
+      }
+    }
+  }
+}
+
