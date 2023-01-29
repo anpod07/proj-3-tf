@@ -28,11 +28,12 @@ pipeline {
         '''
       }
     }
-    stage('TestAWSCLI') {
+    stage('TestAWScliAndTerraform') {
       steps {
         sh '''
           aws --version
           aws s3 ls s3://anpod07-tf-statefile
+          terraform --version
         '''
       }
     }
