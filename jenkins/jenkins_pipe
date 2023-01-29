@@ -55,6 +55,7 @@ pipeline {
         ]]) {
           dir('terraform') {
             sh '''
+              pwd
               terraform init -no-color
               terraform apply -auto-approve -no-color
               terraform output | awk \'{print $3}\' | tr -d \'\\\"\'
@@ -70,15 +71,19 @@ pipeline {
           keyFileVariable: 'SRV1', 
           usernameVariable: 'ubuntu'
         )]) {
-          sh '''
-            echo "[test1]" > hosts
-            aws ec2 describe-instances \
-              --filters 'Name=tag:Name,Values=my_tf_ec2' \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text |\
-              awk '{print $0, " ansible_user=ubuntu"}' >> hosts
-            ansible-playbook get-info-from-ec2.yaml -i hosts --private-key $SRV1
-          '''
+          dir('ansible') {
+            sh '''
+              pwd
+              echo "[test1]" > hosts
+              aws ec2 describe-instances \
+                --region 'eu-central-1' \
+                --filters 'Name=tag:Name,Values=my_tf_ec2' \
+                --query 'Reservations[*].Instances[*].PublicIpAddress' \
+                --output text |\
+                awk '{print $0, " ansible_user=ubuntu"}' >> hosts
+              ansible-playbook get-info-from-ec2.yaml -i hosts --private-key $SRV1
+            '''
+          }
         }
       }
     }
