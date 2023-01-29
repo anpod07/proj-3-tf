@@ -10,8 +10,16 @@
     apt: name=docker.io state=latest
   - name: Starting Docker service
     service: name=docker state=started enabled=yes
+  - name: Add $USER to docker Group
+    shell: "usermod -aG docker ubuntu"
+    changed_when: false
   - name: Check Docker service is running
     shell: "systemctl status docker.service"
     changed_when: false
     register: out1
   - debug: msg="{{out1.stdout_lines}}"
+  - name: Check if ubuntu user is in docker Group
+    shell: "grep docker /etc/group"
+    changed_when: false
+    register: out2
+  - debug: msg="{{out2.stdout_lines}}"
