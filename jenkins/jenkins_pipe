@@ -14,20 +14,20 @@ pipeline {
   }
 
   stages {
-//    stage('CleanWorkspace') {
-//      steps {
-//        cleanWs()
-//      }
-//    }
-//    stage('GetCodeFromGitHub') {
-//      steps {
-//        git branch: 'main', credentialsId: 'github-key', url: 'git@github.com:anpod07/proj-3-tf.git'
-//        sh '''
-//          pwd
-//          ls -la
-//        '''
-//      }
-//    }
+    stage('CleanWorkspace') {
+      steps {
+        cleanWs()
+      }
+    }
+    stage('GetCodeFromGitHub') {
+      steps {
+        git branch: 'main', credentialsId: 'github-key', url: 'git@github.com:anpod07/proj-3-tf.git'
+        sh '''
+          pwd
+          ls -la
+        '''
+      }
+    }
     stage('TestAWScliAndTerraform') {
       steps {
         withCredentials([[
@@ -95,6 +95,7 @@ pipeline {
           dir('ansible') {
             sh '''
               pwd
+              sleep 5
               ansible-playbook get-info-from-ec2.yaml -i hosts --private-key $SRV1
             '''
           }
