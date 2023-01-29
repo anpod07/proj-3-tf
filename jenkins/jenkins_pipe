@@ -38,22 +38,21 @@ pipeline {
         ]]) {
           sh '''
             aws --version
-            aws s3 ls
             aws s3 ls s3://anpod07-tf-statefile
             terraform --version
           '''
         }
       }
     }
-//    stage('ExecTerraformCode') {
-//      steps {
-//        sh '''
-//          terraform init
-//          terraform plan
-//        '''
-////          terraform apply -auto-approve
-//      }
-//    }
+    stage('ExecTerraformCode') {
+      steps {
+        sh '''
+          terraform init
+          terraform plan
+        '''
+//          terraform apply -auto-approve
+      }
+    }
   }
 }
 
