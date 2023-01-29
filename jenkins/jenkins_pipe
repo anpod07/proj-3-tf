@@ -46,11 +46,18 @@ pipeline {
     }
     stage('ExecTerraformCode') {
       steps {
-        sh '''
-          terraform init
-          terraform plan
-        '''
-//          terraform apply -auto-approve
+        withCredentials([[
+          $class: 'AmazonWebServicesCredentialsBinding',
+          credentialsId: "jenkins-aws-ec2_s3",
+          accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+        ]]) {
+          sh '''
+            terraform init -no-color
+            terraform plan -no-color
+          '''
+        }
+//          terraform apply -auto-approve -no-color
       }
     }
   }
