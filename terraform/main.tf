@@ -37,7 +37,7 @@ resource "aws_security_group" "my_sg_4_tf_ec2" {
   name        = "TF_SSH"
   description = "GS for Amazon test TF EC2"
   dynamic "ingress" {
-    for_each = ["22"]
+    for_each = ["22", "80"]
     content {
       from_port   = ingress.value
       to_port     = ingress.value

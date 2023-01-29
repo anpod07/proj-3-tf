@@ -103,11 +103,32 @@ pipeline {
         }
       }
     }
-//    stage('CleanWorkspace') {
-//      steps {
-//        cleanWs()
-//      }
-//    }
+    stage('LoginToDockerHub') {
+      steps {
+        withCredentials([usernamePassword(
+          credentialsId: 'dockerhub_login',
+          passwordVariable: 'PASSWORD',
+          usernameVariable: 'USERNAME')]) {
+            sh "docker login -u $USERNAME -p $PASSWORD"
+        }
+      }
+    }
+    stage('PullDockerImage') {
+      steps {
+          sh '''
+            docker pull anpod07/nginx-test:latest
+            if [ -n `docker ps -a | grep myapp` ]
+             then 
+              docker stop myapp:latest
+              docker rmi myapp:latest
+            fi
+            docker tag anpod07/nginx-test:latest myapp:latest
+            docker run -d --rm --name myapp -p 80:80 myapp:latest
+            docker rmi anpod07/nginx-test:latest
+          '''
+        }
+      }
+    }
   }
 }
 
