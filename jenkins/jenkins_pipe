@@ -10,7 +10,7 @@ pipeline {
   }
 
   triggers {
-    upstream 'testpipe'
+    upstream 'proj-3-pipeline'
   }
 
   stages {
@@ -40,6 +40,7 @@ pipeline {
             aws --version
             aws s3 ls s3://anpod07-tf-statefile
             terraform --version
+            ansible --version
           '''
         }
       }
@@ -52,19 +53,19 @@ pipeline {
           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
         ]]) {
-          sh '''
-            terraform init -no-color
-            terraform plan -no-color
-          '''
+          dir('terraform') {
+            sh 'terraform init -no-color'
+            sh 'terraform plan -no-color'
+//            sh 'terraform apply -auto-approve -no-color'
+          }
         }
-//          terraform apply -auto-approve -no-color
       }
     }
-    stage('CleanWorkspace') {
-      steps {
-        cleanWs()
-      }
-    }
+//    stage('CleanWorkspace') {
+//      steps {
+//        cleanWs()
+//      }
+//    }
   }
 }
 
