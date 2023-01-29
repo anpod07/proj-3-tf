@@ -60,6 +60,11 @@ pipeline {
 //          terraform apply -auto-approve -no-color
       }
     }
+//    stage('CleanWorkspace') {
+//      steps {
+//        cleanWs()
+//      }
+//    }
   }
 }
 
