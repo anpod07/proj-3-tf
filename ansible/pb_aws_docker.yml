@@ -1,0 +1,17 @@
+- name: Install Docker
+  hosts: test1
+  become: yes
+
+  tasks:
+  - name: Updating Repositories
+    shell: "apt update"
+    changed_when: false
+  - name: Installing Docker
+    apt: name=docker.io state=latest
+  - name: Starting Docker service
+    service: name=docker state=started enabled=yes
+  - name: Check Docker service is running
+    shell: "systemctl status docker.service"
+    changed_when: false
+    register: out1
+  - debug: msg="{{out1.stdout_lines}}"
