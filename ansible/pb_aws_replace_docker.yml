@@ -32,7 +32,7 @@
     register: out2
   - debug: msg="{{out2.stdout_lines}}"
   - name: Check docker ps
-    shell: "docker ps"
+    shell: "docker ps --no-trunc"
     changed_when: false
     register: out3
   - debug: msg="{{out3.stdout_lines}}"
