@@ -13,6 +13,7 @@
   - name: Add $USER to docker Group
     shell: "usermod -aG docker ubuntu"
     changed_when: false
+
   - name: Check Docker service is running
     shell: "systemctl status docker.service"
     changed_when: false

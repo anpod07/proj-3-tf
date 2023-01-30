@@ -85,7 +85,7 @@ pipeline {
         }
       }
     }
-    stage('ExecAnsibleCode') {
+    stage('InstallDockerViaAnsible') {
       steps {
         withCredentials([sshUserPrivateKey(
           credentialsId: 'jenkins-aws-ec2_ssh_srv1', 
@@ -97,25 +97,27 @@ pipeline {
               pwd
               sleep 5
               ansible-playbook get-info-from-ec2.yml -i hosts --private-key $SRV1
-              ansible-playbook pb_aws_docker.yml -i hosts --private-key $SRV1
+              ansible-playbook pb_aws_install_docker.yml -i hosts --private-key $SRV1
             '''
           }
         }
       }
     }
-    stage('ReplaceDockerImage') {
+    stage('ReplaceDockerImageViaAnsible') {
       steps {
-          sh '''
-            docker pull anpod07/nginx-test:latest
-            if [ -n `docker ps -a | grep myapp` ]
-             then 
-              docker stop myapp:latest
-              docker rmi myapp:latest
-            fi
-            docker tag anpod07/nginx-test:latest myapp:latest
-            docker run -d --rm --name myapp -p 80:80 myapp:latest
-            docker rmi anpod07/nginx-test:latest
-          '''
+        withCredentials([sshUserPrivateKey(
+          credentialsId: 'jenkins-aws-ec2_ssh_srv1', 
+          keyFileVariable: 'SRV1', 
+          usernameVariable: 'ubuntu'
+        )]) {
+          dir('ansible') {
+            sh '''
+              pwd
+              sleep 5
+              ansible-playbook pb_aws_replace_docker.yml -i hosts --private-key $SRV1
+            '''
+          }
+        }
       }
     }
   }
