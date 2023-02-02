@@ -1,6 +1,7 @@
 pipeline {
   agent {
-    label 'master'
+//    label 'master'
+    label 'docker-slave-1'
   }
 
   options {
